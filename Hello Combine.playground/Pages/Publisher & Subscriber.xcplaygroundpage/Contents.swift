@@ -13,9 +13,16 @@ let subscription1 = publisher.sink { value in
     print("Received Value: \(value)")
 }
 
+let subscription = Just("Hello").sink { value in
+    print("바로 쓰기! : \(value)")
+}
+
 let subscription2 = arrayPublisher.sink { value in
+    print("finished")
+} receiveValue: { value in
     print("Received ArrayValue: \(value)")
 }
+
 
 let subscription3 = publisher.sink (receiveCompletion: { (result) in
     switch result {
@@ -38,20 +45,23 @@ class SojinSubscriber: Subscriber {
     // 구독자에게 게시자를 성공적으로 구독했으며 항목을 요청할 수 있음을 알림
     func receive(subscription: Subscription) {
         print("구독 시작")
-        subscription.request(.unlimited)
+        subscription.request(.max(1))
     }
     
     // 구독자가 받을 것으로 예상하는 추가 요소 수를 나타내는 인스턴스
     func receive(_ input: Input) -> Subscribers.Demand {
         print("\(input)")
-        return .none
+        
+        switch input {
+        case 0:
+            return .max(2)
+        default:
+            return .none
+        }
+        
     }
     
     // 구독자에게 게시자가 정상적으로 또는 오류와 함께 게시를 완료했음을 알립니다.
-<<<<<<< HEAD
-    // Failure: , Never:
-=======
->>>>>>> c5573b9 (Combine_baseic)
     func receive(completion: Subscribers.Completion<Never>) {
         print("완료", completion)
     }
