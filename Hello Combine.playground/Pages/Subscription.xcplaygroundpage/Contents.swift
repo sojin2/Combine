@@ -5,9 +5,9 @@ import Combine
 
 let subject = PassthroughSubject<String, Never>()
 
-// The print() operator prints you all lifecycle events
+// print() - 이벤트를 다 출력하고 싶을때 사용
 let subscription1 = subject
-    .print()
+    .print("[Debug]")
     .sink { value in
         print("Subscriber received value: \(value)")
     }
@@ -30,7 +30,7 @@ let subscription3 =  subject2.sink (receiveCompletion: { (result) in
     case .finished:
         print("finished")
     case .failure(let error):
-        print("에러 삐용삐용")
+        print("에러나따")
         print(error.localizedDescription)
     }
 }, receiveValue: { value in
@@ -42,5 +42,3 @@ subject2.send(completion: .failure(SojinError.unknown))
 subject2.send("Sojin")
 
 
-
-//: [Next](@next)
